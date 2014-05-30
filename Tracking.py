@@ -91,7 +91,7 @@ def start_video(mode):
         elif(mode == 0):
         	thresh = cv2.inRange(hsv,np.array((0, 147, 22)), np.array((256, 256, 256)))
         #thresh2 = thresh.copy()
-
+        # parameters of min and max values obtained using sliders
         thresh2 = morphOps(thresh)
         # find contours in the threshold image
         contours,hierarchy = cv2.findContours(thresh,cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
@@ -158,6 +158,9 @@ class Tracking():
     def tracking(self):
 
         start_video(0)
+        # E when changed to start_video(1) 
+        # E calibrates the image detection system 
+        # E this brings up the window containing sliders for each color detected by the webcam
 #	    return start_video(mode)
 
 

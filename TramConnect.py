@@ -59,7 +59,7 @@ class TramConnect():
         try:
             sock = socket()
         #Disable this to make it work with the tram server
-            sock.settimeout(1)
+            sock.settimeout(1) # E comment this out to work w/o BB, eliminates timeouts
             sock.connect((host, port)) #Connect takes tuple of host and port
             return sock
 
@@ -102,7 +102,8 @@ class TramConnect():
                             TramAction.temperature = j
                         if(j==2):
                             emergency = 1
-
+                        # E To implment more checks if(j==2 or j==7 or j==8):
+                        # 2 related to accelerometer, 7 to low battery, 8 to high temp in tram 
                         TramAction.emergency = emergency
 
             except Exception ,e:

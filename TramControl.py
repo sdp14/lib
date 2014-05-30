@@ -366,8 +366,8 @@ def motor_move(pos):
                 val = int(instrument.read_register(127))
                 print 'motor value returned: ', hex(val)
 
-        TramAction.location = 0
-##        if(TramControl.sock):
+        TramAction.location = 0  # E following code removed because of the use of the camera 
+##        if(TramControl.sock): # E For use of backing tram slowly into station 
 ##            TramConnect().timeout(0)
 ##            if (TramAction.motor_switch!=5 and docking):
 ##                time.sleep(5)
@@ -475,13 +475,13 @@ if __name__ == '__main__':
     TramControl.picture = Picture()
     TramControl.upload = Upload()
     TramControl.response = ''
-    TramControl.position=0
-    TramControl.direction=1
-    TramControl.maxrange=500
-    TramControl.minrange=0
-    TramControl.datalogger={}
+    TramControl.position=0 # E defines starting position as distance from base station
+    TramControl.direction=1 
+    TramControl.maxrange=500 # E allowable length of travel in cm. Never above distance in cm of length of cable - x
+    TramControl.minrange=0 # E closest distance allowed to base station
+    TramControl.datalogger={} 
     TramControl.track_pos=0
-    TramControl.cable=0
+    TramControl.cable=0 # E cable orientation. if over tram = 0, if under tram = 1. 
 
 ##    TramConnect().timeout(0)
 ##    while 1:
@@ -501,7 +501,7 @@ if __name__ == '__main__':
 ##            TramAction.accel_result = 0
 
         while (datetime.now().time().hour > 0 and datetime.now().time().hour < 24):
-
+            # E > 0 is when tram set to begin operations, < 24 is when tram cease operations
             if(not TramAction.run):
                 print "Entering shutdown state"
                 break
