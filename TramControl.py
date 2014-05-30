@@ -334,10 +334,10 @@ def motor_move(pos):
     try:
         instrument = minimalmodbus.Instrument('COM6', 1)
         instrument.serial.port = 'COM6'         # this is the serial port name
-        instrument.serial.baudrate = 9600   # Baud
+        instrument.serial.baudrate = 9600   # Baud # E (symbols per second)
         instrument.serial.bitsize = 8
         instrument.serial.parity   = serial.PARITY_EVEN
-        instrument.serial.stopbits = 1
+        instrument.serial.stopbits = 1 # E Used to indicate the end of data transmission
         instrument.serial.timeout  = 0.1   # seconds
         instrument.address = 1     # this is the slave address number
 
