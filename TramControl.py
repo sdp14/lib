@@ -29,14 +29,14 @@ from ParseData import ParseData
 from Tracking import Tracking
 
 
-class StateT(State):
+class StateT(State): # E Takes info from TramAction.py. If the input is self.transitions report results
 
     def __init__(self):
         self.transitions = None
     def next(self, input):
         if(input in self.transitions):
-            print "Tramaccel info is: ", TramAction.accel_result
-            print "Emergeny info is: ", TramAction.emergency
+            print "Tramaccel info is: ", TramAction.accel_result # E TramAction.accel_result = 0
+            print "Emergeny info is: ", TramAction.emergency # E TramAction.emergency = 0
 
             return self.transitions[input]
         else:
@@ -76,8 +76,8 @@ class Move(StateT):
         if(len(param)<2):
             print "tram direction ",TramControl.direction
             if(TramControl.direction>0):
-                motormove = 9 - TramControl.cable
-                dist = 100
+                motormove = 9 - TramControl.cable #E TramControl.cable initially set to 0 
+                dist = 100 # E This will be changed if stopping distance need be changed 
             else:
                 motormove = 8 + TramControl.cable
                 dist = -100
@@ -85,21 +85,21 @@ class Move(StateT):
                 TramControl.direction=-1
             if(TramControl.direction<TramControl.minrange and TramControl.position+dist < TramControl.minrange):
                 TramControl.direction=1
-            if(dist==100):
+            if(dist==100): # E prevents tram from moving too far away
                 if(TramControl.position+dist>TramControl.maxrange):
-                    print("Move exceeds transact range!")
+                    print("Move exceeds cable length!")
                     return
 
-            if(dist==-100):
+            if(dist==-100): # E prevents tram from getting too close 
                 if(TramControl.position+dist<TramControl.minrange):
-                    print("Move exceeds transact range!")
+                    print("Move exceeds cable length!")
                     return
 
             print("Tram: Moving %i centimeter(s) " % dist + "to position %i" % (TramControl.position+dist))
             if(motor_move(motormove)):
                 TramControl.position+=dist
 
-##                print "Tracking result: ", TramAction.location
+##                print "Tracking result: ", TramAction.location 
                 WebSite().tram_info(int(TramControl.position/100), 'move', 'success', int(TramControl.position/50), TramAction.accel_result)
             else:
                 WebSite().tram_info(int(TramControl.position/100), 'move', 'failure', int(TramControl.position/50), TramAction.accel_result)
@@ -108,11 +108,11 @@ class Move(StateT):
 
         dist = int(param[1])
 
-        if(dist>TramControl.maxrange or dist<TramControl.minrange):
-            print("Move exceeds transact range!")
+        if(dist>TramControl.maxrange or dist<TramControl.minrange): # E Prevents movement out of the length range min and max 
+            print("Move exceeds cable length!")
             return
 
-        while(TramControl.position!=dist):
+        while(TramControl.position!=dist): # E moves motor (how are these distances working?)
             if (dist-TramControl.position>0 and dist-TramControl.position<=5):
                 motormove=11 - TramControl.cable
                 location=1
@@ -131,8 +131,8 @@ class Move(StateT):
             if (dist-TramControl.position<=-50):
                 motormove=8 + TramControl.cable
                 location=-100
-            print("Tram: Moving %i centimeter(s) " % location + "to position %i" % (TramControl.position+location))
-            if(motor_move(motormove)):
+            print("Tram: Moving %i centimeter(s) " % location + "to position %i" % (TramControl.position+location)) # E Prints how far moving and where tram will end up
+            if(motor_move(motormove)): # E Prints whether the correct distance was moved 
                 TramControl.position+=location
                 WebSite().tram_info(int(TramControl.position/100), 'move', 'success', int(TramControl.position/50), TramAction.accel_result)
             else:
@@ -188,20 +188,20 @@ class Measure(StateT):
 ##            TramConnect().send(TramControl.sock, param)
 ##            TramAction.emergency=0
 
-        try:
+        try: # E try and except are for if an error occurs 
             print('Sending connection test')
             TramControl.sock.send('Connection test')
             print repr(TramAction.response)
-        except Exception, e:
-            # whatever you need to do when the connection is dropped
+        except Exception, e: # E do we need to add something for when the connection is dropped??
+            #  S whatever you need to do when the connection is dropped
             print('Attempting reconnect to server')
             connect()
 
-        if(TramControl.sock):
-            print("Tram: Sending Wait.")
-            reset = ['wait',0,0,0,0,0,TramAction.measurement_tolerance,TramAction.acceleration_sensitivity,TramAction.acceleration_tolerance]
-            TramConnect().send(TramControl.sock, reset)
-            time.sleep(1)
+        if(TramControl.sock): # E How information is sent over the connection (.sock)
+            print("Tram: Sending Wait.") # E Prints message
+            reset = ['wait',0,0,0,0,0,TramAction.measurement_tolerance,TramAction.acceleration_sensitivity,TramAction.acceleration_tolerance] # E makes what to send 
+            TramConnect().send(TramControl.sock, reset) # E sends over connection
+            time.sleep(1) # E wait time 
 
             print("Tram: Taking Measurements.")
             TramConnect().send(TramControl.sock, param)
@@ -243,7 +243,7 @@ class Measure(StateT):
 class Upload(StateT):
 
     def run(self, param):
-        if(param[0]!='upload'):
+        if(param[0]!='upload'): # if the param isn't upload then just return 
             return
 
         recs = {}
@@ -297,7 +297,7 @@ class Upload(StateT):
         return StateT.next(self, input)
 
 
-class Picture(StateT):
+class Picture(StateT): # E takes a picture. Possibily need an error catch 
 
     def run(self, param):
         if(param[0]!='picture'):
