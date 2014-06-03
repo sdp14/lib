@@ -2,7 +2,8 @@ import time
 import cv2
 import numpy as np
 from TramAction import TramAction
-
+# E cv2 is a function that is part of cv (function that smart people wrote)
+ 
 
 def morphOps(thresh):
     erodeElement = cv2.getStructuringElement(getattr(cv2, 'MORPH_RECT'), (4, 4))

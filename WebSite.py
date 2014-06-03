@@ -2,7 +2,7 @@
 # Name:        module1
 # Purpose:
 #
-# Author:      NP
+# Author:      NoahP
 #
 # Created:     20/02/2014
 # Copyright:   (c) NP 2014
@@ -20,7 +20,7 @@ def main():
     pass
 
 
-def get_address():
+def get_address(): # E reads in config file 
 ##    address = 'http://192.168.2.104:8000'
     recs = {}
     for lines in open(r'.\lib\tramconfig.txt').readlines():
@@ -30,22 +30,22 @@ def get_address():
     return recs['server'].replace("\n", "")
 
 
-class WebSite():
+class WebSite(): # E get HTML data 
    # data = {'position': '5 meters', 'command_info': {'status': 'success', 'current_command': 'move'}, 'pos_percentage': '60', 'battery_info': '2 hours'}
    # upload_JSON(data)
-    def get_html_data(self, website):
+    def get_html_data(self, website): # E give it something and it returns the data from the website 
         ##print ('connenting to: '+ get_address()+website)
-        try:
-            req = urllib2.Request(get_address()+website)
-            response = urllib2.urlopen((req), timeout=2)
-            the_page = response.read()
-            return the_page
-        except Exception, e:
+        try: # E networking 
+            req = urllib2.Request(get_address()+website) # E request the website
+            response = urllib2.urlopen((req), timeout=2) # E request sent 
+            the_page = response.read() # E read
+            return the_page # E Return 
+        except Exception, e: # E takes too long, websitre blocked etc. 
             print "URL error(%s)" % (e)
             return False
 
 
-    def login(self, br):
+    def login(self, br): # E try and open website 
         self.br = br
 
         try:
@@ -53,7 +53,7 @@ class WebSite():
             br.select_form(nr=0)
             br.form['username'] = "tram"
             br.form['password'] = "tramisfam"
-            br.submit()
+            br.submit() # E give and submit 
 
 ##        except urllib2.HTTPError:
 ##            pass
@@ -63,17 +63,17 @@ class WebSite():
 
 
     #uploads the json file to the website
-    def upload_website(self, data, mywebsite, filetype):
+    def upload_website(self, data, mywebsite, filetype): # E send the json, pass in data 
         #url of website to upload the json
-        mywebsite = get_address()+mywebsite
+        mywebsite = get_address()+mywebsite # E make the website and print for debugging 
         print mywebsite
         #Mechanize methods to select the right form to submit
-        br = mechanize.Browser()
-        self.login(br)
-        try:
+        br = mechanize.Browser() # E login 
+        self.login(br) 
+        try: # E Start tryng to go over network 
             br.open((mywebsite), timeout=2)
             br.select_form(nr=0)
-            if(filetype == 0):
+            if(filetype == 0): # E depending of file type, different things will be done. What are these file types??!
                 try:
                     br.form['tram_info'] = ""
                     br.form['tram_info'] = json.dumps(data)
@@ -109,17 +109,17 @@ class WebSite():
             #be validated on the server
 
             #submitting the form
-            try:
+            try: # E sends to website 
                 br.submit()
             except Exception, e:
                 return False
 
-        except Exception, e:
+        except Exception, e: # E issues logging in 
             print "Mechanize error %s" % str(e)
             return False
 
 
-    def tram_info(self, position, current_command, status, pos_percentage, accelerometer):
+    def tram_info(self, position, current_command, status, pos_percentage, accelerometer): # E sets all the variables
         self.position =position
         self.current_command = current_command
         self.status = status
@@ -133,7 +133,7 @@ class WebSite():
         data['pos_percentage'] = pos_percentage
         accel=''
         emergency = TramAction.accel_result
-        if (TramAction.accel_result==2):
+        if (TramAction.accel_result==2): 
             accel='Accelerometer is experiencing a lot of turbulance: '
             emergency=2
         if(TramAction.temperature == 3):
@@ -153,19 +153,19 @@ class WebSite():
         timestamp = str(time.localtime().tm_mon) +"/" + str(time.localtime().tm_mday) + "/" + str(time.localtime().tm_year) + " " + str(time.localtime().tm_hour) + ":" + str(time.localtime().tm_min) + ":" + str(time.localtime().tm_sec)
         data['timestamp'] = timestamp
 
-        self.upload_website(data, '/data/tram_data_upload/', 0)
+        self.upload_website(data, '/data/tram_data_upload/', 0) # E uploads all this stuff to the website once it is done 
 
 
-    def image_upload(self, filename, mywebsite):
+    def image_upload(self, filename, mywebsite): # E 
 
         #url of website to upload the json
-        mywebsite = get_address()+mywebsite
+        mywebsite = get_address()+mywebsite # E Builds website 
         print mywebsite
         #Mechanize methods to select the right form to submit
         br = mechanize.Browser()
         self.login(br)
 
-        try:
+        try: # E tries to open website and add a file 
             br.open(mywebsite, timeout=2)
             br.select_form(nr=0)
 
@@ -176,8 +176,8 @@ class WebSite():
             br.form.set_all_readonly(False)
 
             br.submit()
-            print "Image Uploaded"
-        except Exception, e:
+            print "Image Uploaded" # E succeeds 
+        except Exception, e: # E Fails 
             print "Mechanize error %s" % str(e)
             return False
 

@@ -2,7 +2,7 @@
 # Name:        TramControl
 # Purpose:
 #
-# Author:      NP
+# Author:      NoahP
 #
 # Created:     15/01/2014
 # Copyright:   (c) NP 2014
@@ -29,14 +29,14 @@ from ParseData import ParseData
 from Tracking import Tracking
 
 
-class StateT(State): # E Takes info from TramAction.py. If the input is self.transitions report results
-
+class StateT(State): # E Takes info from TramAction.py. If the input is self.transitions report results 
+# E Prints accel and if it is an emergency or not. 
     def __init__(self):
         self.transitions = None
     def next(self, input):
         if(input in self.transitions):
             print "Tramaccel info is: ", TramAction.accel_result # E TramAction.accel_result = 0
-            print "Emergeny info is: ", TramAction.emergency # E TramAction.emergency = 0
+            print "Emergency info is: ", TramAction.emergency # E TramAction.emergency = 0
 
             return self.transitions[input]
         else:
@@ -45,15 +45,15 @@ class StateT(State): # E Takes info from TramAction.py. If the input is self.tra
 ##            raise RuntimeError("Input %s not supported for current state" % input)
 
 
-class Wait(StateT):
+class Wait(StateT): # E takes in a number of seconds wait 
 
     def run(self, param):
         if(param[0]!='wait' or len(param)<2):
             return
         dur = int(param[1])
-        print("Tram: Waiting %i Second(s)" % dur)
-        time.sleep(dur)
-        WebSite().tram_info(int(TramControl.position/100), param[0], 'success', int(TramControl.position/50), TramAction.accel_result)
+        print("Tram: Waiting %i Second(s)" % dur) # E prints number of seconds waiting 
+        time.sleep(dur) # E Waits 
+        WebSite().tram_info(int(TramControl.position/100), param[0], 'success', int(TramControl.position/50), TramAction.accel_result) # Updates website 
 
     def next(self, input):
         # Supported transition initialization:
@@ -68,7 +68,7 @@ class Wait(StateT):
         return StateT.next(self, input)
 
 
-class Move(StateT):
+class Move(StateT): # E handles going forawrd and backward and makes sure you don't go too far 
 
     def run(self, param):
         if(param[0]!='move'):
@@ -85,7 +85,7 @@ class Move(StateT):
                 TramControl.direction=-1
             if(TramControl.direction<TramControl.minrange and TramControl.position+dist < TramControl.minrange):
                 TramControl.direction=1
-            if(dist==100): # E prevents tram from moving too far away
+            if(dist==100): # E prevents tram from moving too far away 
                 if(TramControl.position+dist>TramControl.maxrange):
                     print("Move exceeds cable length!")
                     return
@@ -132,8 +132,8 @@ class Move(StateT):
                 motormove=8 + TramControl.cable
                 location=-100
             print("Tram: Moving %i centimeter(s) " % location + "to position %i" % (TramControl.position+location)) # E Prints how far moving and where tram will end up
-            if(motor_move(motormove)): # E Prints whether the correct distance was moved 
-                TramControl.position+=location
+            if(motor_move(motormove)): # E Prints whether the correct distance was moved # E Actually do the movment. before is just calculates
+                TramControl.position+=location # E 136 - 139 updates the website 
                 WebSite().tram_info(int(TramControl.position/100), 'move', 'success', int(TramControl.position/50), TramAction.accel_result)
             else:
                 WebSite().tram_info(int(TramControl.position/100), 'move', 'failure', int(TramControl.position/50), TramAction.accel_result)
@@ -163,7 +163,7 @@ class Move(StateT):
         return StateT.next(self, input)
 
 
-class Measure(StateT):
+class Measure(StateT):  # E Ends up calling the FTP stuff, takes file and copies to our local space 
 
     def run(self, param):
         ## param 1 = take datalogger measurements
@@ -204,12 +204,12 @@ class Measure(StateT):
             time.sleep(1) # E wait time 
 
             print("Tram: Taking Measurements.")
-            TramConnect().send(TramControl.sock, param)
+            TramConnect().send(TramControl.sock, param) # E measurement taken 
 
             time.sleep(2)
             if(param[1] or param[2] or param[3]):
-                print "Tram: Downloading Data."
-                TramConnect().FTP(param)
+                print "Tram: Downloading Data." # E once measurement is done 
+                TramConnect().FTP(param) # E download onto local  
                 ParseData().append_data()
     ##            print("Tram: Uploading Results.")
     ##            ParseData().upload('/data/json_upload/')
@@ -225,7 +225,7 @@ class Measure(StateT):
     ##            print("Tram: Uploading Results.")
     ##            image_upload(r'.\pics\picture')
 
-        WebSite().tram_info(int(TramControl.position/100), param[0], 'success', int(TramControl.position/50), TramAction.accel_result)
+        WebSite().tram_info(int(TramControl.position/100), param[0], 'success', int(TramControl.position/50), TramAction.accel_result) # E Copy paste to update website 
 
     def next(self, input):
         # Supported transition initialization:
@@ -240,7 +240,7 @@ class Measure(StateT):
         return StateT.next(self, input)
 
 
-class Upload(StateT):
+class Upload(StateT): # E If param one, call this upload function etc... 
 
     def run(self, param):
         if(param[0]!='upload'): # if the param isn't upload then just return 
@@ -297,7 +297,7 @@ class Upload(StateT):
         return StateT.next(self, input)
 
 
-class Picture(StateT): # E takes a picture. Possibily need an error catch 
+class Picture(StateT): # E takes a picture. Possibily need an error catch # E calls take picture function then 307 updates website 
 
     def run(self, param):
         if(param[0]!='picture'):
@@ -306,7 +306,7 @@ class Picture(StateT): # E takes a picture. Possibily need an error catch
         take_picture()
         WebSite().tram_info(int(TramControl.position/100), param[0], 'success', int(TramControl.position/50), TramAction.accel_result)
 
-    def next(self, input):
+    def next(self, input): # E make sure you go to one of these commands 
         # Supported transition initialization:
         if not self.transitions:
             self.transitions = {
@@ -329,42 +329,42 @@ def main():
     pass
 
 
-def motor_move(pos):
+def motor_move(pos): # E move the motor to position you are looking for 
 
     try:
-        instrument = minimalmodbus.Instrument('COM6', 1)
+        instrument = minimalmodbus.Instrument('COM6', 1) # E setting all the values 
         instrument.serial.port = 'COM6'         # this is the serial port name
         instrument.serial.baudrate = 9600   # Baud # E (symbols per second)
-        instrument.serial.bitsize = 8
+        instrument.serial.bitsize = 8 
         instrument.serial.parity   = serial.PARITY_EVEN
         instrument.serial.stopbits = 1 # E Used to indicate the end of data transmission
         instrument.serial.timeout  = 0.1   # seconds
         instrument.address = 1     # this is the slave address number
 
-        docking = False
+        docking = False # E see if youre docking or not 
         if((pos==8+TramControl.cable and TramControl.position<=100) or (pos==10+TramControl.cable and TramControl.position<=1) or (pos==12+TramControl.cable and TramControl.position<=10)):
             docking = True
 
-        instrument.write_register(385, 0)
+        instrument.write_register(385, 0) # E writing over the serial 
         instrument.write_register(385, 1)
         instrument.write_register(125, 0)
-        instrument.write_register(125, pos)
-        val = int(instrument.read_register(127))
-        TramConnect().timeout(0)
-        while ((val & 0x4000) == 0):
+        instrument.write_register(125, pos) # E telling where you want to go
+        val = int(instrument.read_register(127)) # E in value 
+        TramConnect().timeout(0) 
+        while ((val & 0x4000) == 0): # E checking to see if bit is set. WHile it is not, message will be sent to update it 
             if (TramAction.location != 0 and (pos==8 or pos==9)):
                 if(TramConnect().timeout(2)):
                     instrument.write_register(125, 0)
                     instrument.write_register(125, 32)
-                    print 'Tracking triggered - motor returned: ', instrument.read_register(127)
+                    print 'Tracking triggered - motor returned: ', instrument.read_register(127) # E camera tracking, if it sees something 
             if(TramControl.sock):
                 if (TramAction.motor_switch==5 and docking):
                     instrument.write_register(125, 0)
                     instrument.write_register(125, 32)
-                    print 'Switch triggered - motor returned: ', instrument.read_register(127)
-            if (val != int(instrument.read_register(127))):
+                    print 'Switch triggered - motor returned: ', instrument.read_register(127) # E If you bump into something? 
+            if (val != int(instrument.read_register(127))): # E val is what it told you last time, if what you are reading now is not equal, then set val to new reading 
                 val = int(instrument.read_register(127))
-                print 'motor value returned: ', hex(val)
+                print 'motor value returned: ', hex(val) # E if the motor is at a new postion, print what the value is. #  This prints new reading
 
         TramAction.location = 0  # E following code removed because of the use of the camera 
 ##        if(TramControl.sock): # E For use of backing tram slowly into station 
@@ -378,7 +378,7 @@ def motor_move(pos):
 ##                    if(TramConnect().timeout(30)):
 ##                        return False
 ##
-        return True
+        return True 
 
 ##        ser = serial.Serial(
 ##            port='COM6',
@@ -412,47 +412,47 @@ def motor_move(pos):
         return False
 
 
-def take_picture():
-    camcapture = cv.CaptureFromCAM(0)
-    if(~camcapture.isOpened()):
+def take_picture(): 
+    camcapture = cv.CaptureFromCAM(0) # E uses cv to take a pic from webcam 
+    if(~camcapture.isOpened()): # E if it can't take a picture, return false 
         return False
 
-    recs = {}
-    for lines in open(r'.\lib\imagerecord.txt').readlines():
+    recs = {} 
+    for lines in open(r'.\lib\imagerecord.txt').readlines(): # E 421-423 goes through record of pictures 
         cur_line = lines.split(" ")
         recs[cur_line[0]]=int(cur_line[1])
 
-    img = cv.QueryFrame(camcapture)
+    img = cv.QueryFrame(camcapture) # E 425-427 save pic to end of record 
     cv.SaveImage(r'.\base_pictures\pic{:>05}.jpg'.format(recs['basepics']), img)
     recs['basepics']=recs['basepics']+1
 
-    f = open(r'.\lib\imagerecord.txt','w')
+    f = open(r'.\lib\imagerecord.txt','w') # E save record with new picture inside 
     for items in recs:
         f.write(str(items)+" "+str(recs[items])+'\n')
     f.close()
 
 
-def connect():
+def connect(): # E Call all connect functions 
     print("Base Station: Trying to connect to tram")
 
     TramControl.sock = TramConnect().connect()
-    if(TramControl.sock):
+    if(TramControl.sock): # E checks connection 
         print('Starting new thread')
-        try:
-            start_new_thread(TramConnect().make_thread, (TramControl.sock,TramControl.response,))
+        try: 
+            start_new_thread(TramConnect().make_thread, (TramControl.sock,TramControl.response,)) # E makes running in background that waits for data (earlier)
             print(TramControl.sock)
-            print('Sending connection test')
+            print('Sending connection test') # E sends little message 
             TramControl.sock.send('Connection test')
         except Exception ,e:
             print("Thread error: "+ str(e))
             return False
 
-    else:
+    else: # E if you fail to set up socket 
         print('Failure connecting to tram')
         return False
 
 
-def tracking():
+def tracking(): # E Does camera, runs the tracking function 
     print("Base Station: Starting tracking")
     try:
         t=Tracking()
@@ -464,7 +464,7 @@ def tracking():
 
 
 
-if __name__ == '__main__':
+if __name__ == '__main__': # E main function, run your code. sets up states 
 
     main()
     ##LabVIEWCode = cdll.LoadLibrary(r'.\lib\SharedLib.dll')
@@ -491,33 +491,33 @@ if __name__ == '__main__':
 #    ParseData().append_data()
 #    sys.exit(0)
 
-    tracking()
-    connect()
+    tracking() # E Calls all the tracking, sets up camera 
+    connect() # E Calsl connect, thing runnign in background to recieve data, runs connection test 
 
 
-    while(TramAction.run):
+    while(TramAction.run): # E assuming the other two have worked, it continues on to this main 
 
 ##        if(datetime.now().time().hour==9):
 ##            TramAction.accel_result = 0
 
-        while (datetime.now().time().hour > 0 and datetime.now().time().hour < 24):
+        while (datetime.now().time().hour > 0 and datetime.now().time().hour < 24): # E sets when you want it to run for. In this case 1 am to midnight
             # E > 0 is when tram set to begin operations, < 24 is when tram cease operations
-            if(not TramAction.run):
+            if(not TramAction.run): # E if you don't have an action, you shut down 
                 print "Entering shutdown state"
                 break
 
             command = []
             params = []
-            print "Current hour: " + str(datetime.now().time().hour)
-            for lines in open(r'.\control.txt').readlines():
+            print "Current hour: " + str(datetime.now().time().hour) # E print out hours 
+            for lines in open(r'.\control.txt').readlines(): # E open contorl. txt which is a list of commands you want it to run, for every command you will add to command array and paramenters 
                 command.append(lines.replace("\n", "").split(" ")[0])
                 params.append(lines.replace("\n", "").split(" "))
-            command = map(string.strip, command)
+            command = map(string.strip, command) # E turn name inside into a func (what python recognizes)
             command = map(TramAction, command)
 
-            TramControl().runAll(command, params)
+            TramControl().runAll(command, params) # E Call run all, which loops through statemachine 
 
-            if(TramAction.emergency!=0):
-                print "Entering emerg0ency state"
+            if(TramAction.emergency!=0): # E if your emergency is not equal to zero, youre entering the emergency state 
+                print "Entering emergency state" 
 
-# E Bruce sucks 
+
