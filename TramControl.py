@@ -341,7 +341,7 @@ def motor_move(pos): # E move the motor to position you are looking for
         instrument.serial.timeout  = 0.1   # seconds
         instrument.address = 1     # this is the slave address number
 
-        docking = False # E see if youre docking or not 
+        docking = False # E see if you're docking or not 
         if((pos==8+TramControl.cable and TramControl.position<=100) or (pos==10+TramControl.cable and TramControl.position<=1) or (pos==12+TramControl.cable and TramControl.position<=10)):
             docking = True
 
@@ -351,7 +351,7 @@ def motor_move(pos): # E move the motor to position you are looking for
         instrument.write_register(125, pos) # E telling where you want to go
         val = int(instrument.read_register(127)) # E in value 
         TramConnect().timeout(0) 
-        while ((val & 0x4000) == 0): # E checking to see if bit is set. WHile it is not, message will be sent to update it 
+        while ((val & 0x4000) == 0): # E checking to see if bit is set. While it is not, message will be sent to update it 
             if (TramAction.location != 0 and (pos==8 or pos==9)):
                 if(TramConnect().timeout(2)):
                     instrument.write_register(125, 0)
