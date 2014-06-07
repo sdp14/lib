@@ -252,32 +252,32 @@ class Upload(StateT): # E If param one, call this upload function etc...
             recs[cur_line[0]]=int(cur_line[1])
 
         if(param[1]=='1'):
-            print("Base: Uploading Data.")
+            print("Base status: Uploading Data...")
             TramControl.datalogger = ParseData().parse_data()
             WebSite().upload_website(TramControl.datalogger, '/data/json_upload/', 1)
 
         if(param[1]=='2'):
-            print("Base: Uploading Excel.")
+            print("Base status: Uploading Excel...")
             ParseData().make_excel_file()
             WebSite().upload_website('Excel', '/articles/file_upload/', 2)
 
         if(param[1]=='3'):
             if(recs['trampics']>0):
-                print("Base: Uploading Tram Picture.")
+                print("Base status: Uploading Tram Picture...")
                 WebSite().upload_website(r'.\tram_pictures\trampic{:>05}.ppm'.format(recs['trampics']-1), '/articles/file_upload/', 3)
             else:
                 return False
 
         if(param[1]=='4'):
             if(recs['basepics']>0):
-                print("Base: Uploading Base Picture.")
+                print("Base status: Uploading Base Picture...")
                 WebSite().upload_website(r'.\base_pictures\basepic{:>05}.jpg'.format(recs['basepics']-1), '/articles/file_upload/', 3)
             else:
                 return False
 
         if(param[1]=='5'):
             if(recs['vids']>0):
-                print("Base: Uploading Tram Video.")
+                print("Base status: Uploading Tram Video...")
                 WebSite().upload_website(r'.\tram_videos\tramvid{:>05}.jpg'.format(recs['vids']-1), '/articles/file_upload/', 4)
             else:
                 return False
@@ -334,7 +334,7 @@ def motor_move(pos): # E move the motor to position you are looking for
     try:
         instrument = minimalmodbus.Instrument('COM6', 1) # E setting all the values 
         instrument.serial.port = 'COM6'         # this is the serial port name
-        instrument.serial.baudrate = 9600   # Baud # E (symbols per second)
+        instrument.serial.baudrate = 9600   # Baud # E (symbols per second)baudbaud
         instrument.serial.bitsize = 8 
         instrument.serial.parity   = serial.PARITY_EVEN
         instrument.serial.stopbits = 1 # E Used to indicate the end of data transmission
