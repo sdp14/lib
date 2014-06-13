@@ -40,7 +40,7 @@ class WebSite(): # E get HTML data
             response = urllib2.urlopen((req), timeout=2) # E request sent 
             the_page = response.read() # E read
             return the_page # E Return 
-        except Exception, e: # E takes too long, websitre blocked etc. 
+        except Exception, e: # E takes too long, website blocked etc. 
             print "URL error(%s)" % (e)
             return False
 
@@ -140,7 +140,7 @@ class WebSite(): # E get HTML data
             accel+='Temperature too high: '
             emergency=2
         if(TramAction.battery == 4):
-            accel+='Battery is low: '
+            accel+='Battery is low: ' 
             emergency=2
         accel+='shutting down.'
         data['shutdown_info'] = accel
