@@ -1,4 +1,4 @@
 myhost 192.168.1.106
-host 192.168.2.103
+host 192.168.172.73
 port 52000
 server http://sdp14.herokuapp.com
