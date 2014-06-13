@@ -49,7 +49,7 @@ class WebSite(): # E get HTML data
         self.br = br
 
         try:
-            br.open(get_address()+'/accounts/login/', timeout=2)
+            br.open(get_address()+'/accounts/login/?next=/data/tram_info/', timeout=2)
             br.select_form(nr=0)
             br.form['username'] = "tram"
             br.form['password'] = "tramisfam"
