@@ -257,13 +257,13 @@ class Upload(StateT): # E If param one, call this upload function etc...
             WebSite().upload_website(TramControl.datalogger, '/data/json_upload/', 1)
 
         if(param[1]=='2'):
-<<<<<<< HEAD
+
             print("Base status: Uploading Excel...")
             ParseData().make_excel_file()
-=======
+
             print("Base: Uploading Excel.")
             ParseData().make_csv_file()
->>>>>>> 5ca8beb167cb26947b5871ed2d924772194d834c
+
             WebSite().upload_website('Excel', '/articles/file_upload/', 2)
 
         if(param[1]=='3'):
@@ -428,7 +428,7 @@ def take_picture():
         recs[cur_line[0]]=int(cur_line[1])
 
     img = cv.QueryFrame(camcapture) # E 425-427 save pic to end of record 
-    cv.SaveImage(r'.\base_pictures\pic{:>05}.jpg'.format(recs['basepics']), img)
+    cv.SaveImage(r'.\base_pictures\pic{:>05}.jpg'.format(recs['basepics']), img) 
     recs['basepics']=recs['basepics']+1
 
     f = open(r'.\lib\imagerecord.txt','w') # E save record with new picture inside 
