@@ -257,8 +257,13 @@ class Upload(StateT): # E If param one, call this upload function etc...
             WebSite().upload_website(TramControl.datalogger, '/data/json_upload/', 1)
 
         if(param[1]=='2'):
+<<<<<<< HEAD
             print("Base status: Uploading Excel...")
             ParseData().make_excel_file()
+=======
+            print("Base: Uploading Excel.")
+            ParseData().make_csv_file()
+>>>>>>> 5ca8beb167cb26947b5871ed2d924772194d834c
             WebSite().upload_website('Excel', '/articles/file_upload/', 2)
 
         if(param[1]=='3'):

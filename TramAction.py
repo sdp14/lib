@@ -1,18 +1,18 @@
 # StateMachine/tram/TramAction.py
-
+# E outlines the fields 
 class TramAction():
-    def __init__(self, action):
+    def __init__(self, action): 
         self.action = action
-    def __str__(self): return self.action
-    def __cmp__(self, other):
+    def __str__(self): return self.action # E turns to a string 
+    def __cmp__(self, other): # E compare function, < > 
         return cmp(self.action, other.action)
     # Necessary when __cmp__ or __eq__ is defined
     # in order to make this class usable as a
     # dictionary key:
-    def __hash__(self):
+    def __hash__(self): # E can put in a dictionary 
         return hash(self.action)
 
-# Static fields; an enumeration of instances:
+# Static fields; an enumeration of instances: # E variables 
 TramAction.wait = TramAction("wait")
 TramAction.move = TramAction("move")
 TramAction.measure = TramAction("measure")
@@ -29,3 +29,5 @@ TramAction.battery = 0
 TramAction.temperature = 0
 TramAction.emergency = 0
 TramAction.run = True
+
+

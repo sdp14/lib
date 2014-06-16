@@ -117,4 +117,4 @@ class StateMachine(): # E
             print(params[c]) # E print parameters recieved 
             self.currentState = self.currentState.next(i) # E changes state to be the next one 
             self.currentState.run(params[c]) # E run the next state 
-            c+=1
+            c+=1 # E increment to use next parameter 
