@@ -163,7 +163,7 @@ class TramConnect():
         print param[1], param[2], param[3] # EB param[1]=1 transfers data, param[2]=1 transfers photos, param[3]=1 transfers video
         try: # E over network so something could go wrong 
             ftp=FTP(host, timeout=2) # E create a connection, specialized to move files back and forth 
-            ftp.login('logger','Snickers2014') #B Logger account and password
+            ftp.login('logger','zz58j8bnQcFPSawhnN8YGtFT') #B Logger account and password
             ftp.cwd('/upload/')  # E current working directory, for the FTP any file given will be in there. 
             if(int(param[1])==1): # E if param 1 is set to 1, data download 
                 print 'download data' 
