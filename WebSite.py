@@ -8,8 +8,8 @@
 # Copyright:   (c) NP 2014
 # Licence:     <your licence>
 #-------------------------------------------------------------------------------
-
-import xlsxwriter
+import csv
+#import xlsxwriter
 import time, datetime
 import json, urllib, urllib2
 import mechanize
@@ -87,7 +87,7 @@ class WebSite(): # E get HTML data
                     return False
             elif(filetype == 2):
                 try:
-                    br.form.add_file(open("excel_file/data_file.xlsx", "rb"), 'multipart/form-data', "data_file.xlsx")
+                    br.form.add_file(open("csv_file/data_file.csv", "rb"), 'multipart/form-data', "data_file.csv")
                     br.form.set_all_readonly(False)
                 except Exception, e:
                     return False
