@@ -8,13 +8,13 @@
 # Copyright:   (c) NP 2014
 # Licence:     <your licence>
 #-------------------------------------------------------------------------------
-import csv
+
 #import xlsxwriter
 import time, datetime
 import json, urllib, urllib2
 import mechanize
 from TramAction import TramAction
-
+import csv
 
 def main():
     pass
