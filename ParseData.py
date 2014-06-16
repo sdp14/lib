@@ -189,4 +189,4 @@ class ParseData(): # E
         writer.writerows(f)
 
 
-    make_csv_file(".\dat_file\MDR.dat", "data_file.csv")
+    make_csv_file(".\dat_file\MDR.dat", ".\csv_file\data_file.csv")
