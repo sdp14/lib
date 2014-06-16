@@ -252,32 +252,37 @@ class Upload(StateT): # E If param one, call this upload function etc...
             recs[cur_line[0]]=int(cur_line[1])
 
         if(param[1]=='1'):
-            print("Base: Uploading Data.")
+            print("Base status: Uploading Data...")
             TramControl.datalogger = ParseData().parse_data()
             WebSite().upload_website(TramControl.datalogger, '/data/json_upload/', 1)
 
         if(param[1]=='2'):
+<<<<<<< HEAD
+            print("Base status: Uploading Excel...")
+            ParseData().make_excel_file()
+=======
             print("Base: Uploading Excel.")
             ParseData().make_csv_file()
+>>>>>>> 5ca8beb167cb26947b5871ed2d924772194d834c
             WebSite().upload_website('Excel', '/articles/file_upload/', 2)
 
         if(param[1]=='3'):
             if(recs['trampics']>0):
-                print("Base: Uploading Tram Picture.")
+                print("Base status: Uploading Tram Picture...")
                 WebSite().upload_website(r'.\tram_pictures\trampic{:>05}.ppm'.format(recs['trampics']-1), '/articles/file_upload/', 3)
             else:
                 return False
 
         if(param[1]=='4'):
             if(recs['basepics']>0):
-                print("Base: Uploading Base Picture.")
+                print("Base status: Uploading Base Picture...")
                 WebSite().upload_website(r'.\base_pictures\basepic{:>05}.jpg'.format(recs['basepics']-1), '/articles/file_upload/', 3)
             else:
                 return False
 
         if(param[1]=='5'):
             if(recs['vids']>0):
-                print("Base: Uploading Tram Video.")
+                print("Base status: Uploading Tram Video...")
                 WebSite().upload_website(r'.\tram_videos\tramvid{:>05}.jpg'.format(recs['vids']-1), '/articles/file_upload/', 4)
             else:
                 return False
@@ -334,14 +339,14 @@ def motor_move(pos): # E move the motor to position you are looking for
     try:
         instrument = minimalmodbus.Instrument('COM6', 1) # E setting all the values 
         instrument.serial.port = 'COM6'         # this is the serial port name
-        instrument.serial.baudrate = 9600   # Baud # E (symbols per second)
+        instrument.serial.baudrate = 9600   # Baud # E (symbols per second)baudbaud
         instrument.serial.bitsize = 8 
         instrument.serial.parity   = serial.PARITY_EVEN
         instrument.serial.stopbits = 1 # E Used to indicate the end of data transmission
         instrument.serial.timeout  = 0.1   # seconds
         instrument.address = 1     # this is the slave address number
 
-        docking = False # E see if youre docking or not 
+        docking = False # E see if you're docking or not 
         if((pos==8+TramControl.cable and TramControl.position<=100) or (pos==10+TramControl.cable and TramControl.position<=1) or (pos==12+TramControl.cable and TramControl.position<=10)):
             docking = True
 
@@ -351,7 +356,7 @@ def motor_move(pos): # E move the motor to position you are looking for
         instrument.write_register(125, pos) # E telling where you want to go
         val = int(instrument.read_register(127)) # E in value 
         TramConnect().timeout(0) 
-        while ((val & 0x4000) == 0): # E checking to see if bit is set. WHile it is not, message will be sent to update it 
+        while ((val & 0x4000) == 0): # E checking to see if bit is set. While it is not, message will be sent to update it 
             if (TramAction.location != 0 and (pos==8 or pos==9)):
                 if(TramConnect().timeout(2)):
                     instrument.write_register(125, 0)

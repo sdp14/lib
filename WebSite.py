@@ -1,3 +1,5 @@
+# <<<<<<< HEAD
+# =======
 #-------------------------------------------------------------------------------
 # Name:        module1
 # Purpose:
@@ -182,3 +184,4 @@ class WebSite(): # E get HTML data
             return False
 
         # br.submit()
+# >>>>>>> 5ca8beb167cb26947b5871ed2d924772194d834c
