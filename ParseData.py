@@ -192,9 +192,6 @@ class ParseData(): # E
 
     # make_csv_file(".\dat_file\MDR.dat", ".\csv_file\data_file.csv")
 
-
-
-
     def changeext(file):
         fileName, fileExtension = os.path.splitext(file)
         os.rename(file, fileName + ".csv")
@@ -205,6 +202,5 @@ class ParseData(): # E
         print fileExtension
 
     changeext('MDR.dat')
-
 
 
