@@ -1,3 +1,0 @@
-vids 0
-basepics 0
-trampics 31
