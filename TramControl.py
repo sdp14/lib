@@ -262,7 +262,7 @@ class Upload(StateT): # E If param one, call this upload function etc...
             ParseData().make_excel_file()
 
             print("Base: Uploading Excel.")
-            ParseData().make_csv_file()
+            ParseData().changeext()
 
             WebSite().upload_website('Excel', '/articles/file_upload/', 2)
 

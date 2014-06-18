@@ -10,7 +10,8 @@
 #-------------------------------------------------------------------------------
 #!usr/bin/python
 #import xlsxwriter
-import csv
+import os
+import shutil
 import time, datetime
 from WebSite import WebSite
 
@@ -182,11 +183,24 @@ class ParseData(): # E
 		# f.close() # E Close both 
 		# workbook.close()
 
-    def make_csv_file(input_name, output_name):
-        f = open(input_name, "r") # E open data 
-        c = open(output_name, "wb")
-        writer = csv.writer(c)
-        writer.writerows(f)
+    # def make_csv_file(input_name, output_name):
+    #     f = open(input_name, "r") # E open data 
+    #     c = open(output_name, "wb")
+    #     writer = csv.writer(c)
+    #     writer.writerows(f)
 
 
-    make_csv_file(".\dat_file\MDR.dat", ".\csv_file\data_file.csv")
+    # make_csv_file(".\dat_file\MDR.dat", ".\csv_file\data_file.csv")
+
+    def changeext(file):
+        fileName, fileExtension = os.path.splitext(file)
+        os.rename(file, fileName + ".csv")
+        src = ".\dat_file\MDR.csv"
+        dst = ".\csv_file\data_file.csv"
+        shutil.move(src, dst)
+        print fileName
+        print fileExtension
+
+    changeext('MDR.dat')
+
+
