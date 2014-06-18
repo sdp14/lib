@@ -195,16 +195,16 @@ class ParseData(): # E
 
 
 
-def changeext(file):
-    fileName, fileExtension = os.path.splitext(file)
-    os.rename(file, fileName + ".csv")
-    src = ".\dat_file\MDR.csv"
-    dst = ".\csv_file\data_file.csv"
-    shutil.move(src, dst)
-    print fileName
-    print fileExtension
+    def changeext(file):
+        fileName, fileExtension = os.path.splitext(file)
+        os.rename(file, fileName + ".csv")
+        src = ".\dat_file\MDR.csv"
+        dst = ".\csv_file\data_file.csv"
+        shutil.move(src, dst)
+        print fileName
+        print fileExtension
 
-changeext('MDR.dat')
+    changeext('MDR.dat')
 
 
 
