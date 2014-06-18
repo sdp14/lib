@@ -141,7 +141,7 @@ class TramConnect():
             return False
 
 
-    def FTP(self, param): # E send a file somewhere else. Open config file, get address set host and port. Print a message
+    def FTP(self, param): # EB Transfer files from the tram computer to the control computer. Open config file, get address set host and port. Print a message
         self.param = param
 
         recs = {}
@@ -154,11 +154,11 @@ class TramConnect():
         global port
         get_address()
 
-        print 'Trying to connect to FTP server' # E Tries to connect to server 
-        print param[1], param[2], param[3] # E each will do something 
-        try: # E over netwrok so something could go wrong 
+        print 'Trying to connect to FTP server' # EB Tries to connect to tram computer 
+        print param[1], param[2], param[3] # EB param[1]=1 transfers data, param[2]=1 transfers photos, param[3]=1 transfers video
+        try: # E over network so something could go wrong 
             ftp=FTP(host, timeout=2) # E create a connection, specialized to move files back and forth 
-            ftp.login('logger','zz58j8bnQcFPSawhnN8YGtFT') # Logger is username, rest is password 
+            ftp.login('logger','zz58j8bnQcFPSawhnN8YGtFT') #B Logger account and password
             ftp.cwd('/upload/')  # E current working directory, for the FTP any file given will be in there. 
             if(int(param[1])==1): # E if param 1 is set to 1, data download 
                 print 'download data' 
@@ -167,7 +167,7 @@ class TramConnect():
                     ftp.retrbinary("RETR " + "tramData.dat", lambda data: filetram.write(data))
                     ##ftp.retrbinary('RETR %s' % "tramData.dat", filetram.write)
                     ##ftp.retrbinary("RETR " + "tramData.dat", open(filetram, 'wb').write)
-                except Exception ,e: # E if you try and fail, print error 
+                except Exception ,e: # EB print error if the try fails 
                     print "FTP Error %s" %e
 
 
