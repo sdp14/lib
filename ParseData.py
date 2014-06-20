@@ -161,27 +161,27 @@ class ParseData(): # E
         return json_data # E return the data point 
 
 
-  #   def make_excel_file(self): # E Makes excel file 
-		# f = open(".\dat_file\MDR.dat", "r") # E open data # E Is this working?
+    def make_excel_file(self): # E Makes excel file 
+		f = open(".\dat_file\MDR.dat", "r") # E open data # E Is this working?
 
-		# name_of_excel_file = "data_file" # E Copy paste into excel 
-		# workbook = xlsxwriter.Workbook('excel_file/' + str(name_of_excel_file) + ".xlsx")
-		# worksheet = workbook.add_worksheet()
+		name_of_excel_file = "data_file" # E Copy paste into excel 
+		workbook = xlsxwriter.Workbook('excel_file/' + str(name_of_excel_file) + ".xlsx")
+		worksheet = workbook.add_worksheet()
 
-		# cur_line = 0
-		# for line in f: # E go line by line 
-		# 	newl = line.split(",") 
+		cur_line = 0
+		for line in f: # E go line by line 
+			newl = line.split(",") 
 
-		# 	it = 0
-		# 	for word in newl: # E word by work writing by worksheet 
-		# 		worksheet.write(cur_line, it, word.replace('"', ''))
-		# 		it += 1
+			it = 0
+			for word in newl: # E word by work writing by worksheet 
+				worksheet.write(cur_line, it, word.replace('"', ''))
+				it += 1
 
-		# 	cur_line += 1
+			cur_line += 1
 
 
-		# f.close() # E Close both 
-		# workbook.close()
+		f.close() # E Close both 
+		workbook.close()
 
     # def make_csv_file(input_name, output_name):
     #     f = open(input_name, "r") # E open data 
@@ -192,15 +192,15 @@ class ParseData(): # E
 
     # make_csv_file(".\dat_file\MDR.dat", ".\csv_file\data_file.csv")
 
-    def changeext(file):
-        fileName, fileExtension = os.path.splitext(file)
-        os.rename(file, fileName + ".csv")
-        src = ".\dat_file\MDR.csv"
-        dst = ".\csv_file\data_file.csv"
-        shutil.move(src, dst)
-        print fileName
-        print fileExtension
+    # def changeext(file):
+    #     fileName, fileExtension = os.path.splitext(file)
+    #     os.rename(file, fileName + ".csv")
+    #     src = ".\dat_file\MDR.csv"
+    #     dst = ".\csv_file\data_file.csv"
+    #     shutil.move(src, dst)
+    #     print fileName
+    #     print fileExtension
 
-    changeext('MDR.dat')
+    # changeext('.\dat_file\MDR.dat')
 
 
