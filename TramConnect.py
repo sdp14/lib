@@ -107,7 +107,7 @@ class TramConnect():
                         TramAction.emergency = emergency
 
             except Exception ,e: # E if something goes wrong on connect it will exit the function. 
-                print("Serial communication error: "+ str(e))
+                print("Serial communication error: "+ str(e)+"   --> TramConnect")
                 break
 
 
