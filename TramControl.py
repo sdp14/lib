@@ -413,7 +413,7 @@ def motor_move(pos): # E move the motor to position you are looking for
 ##        return True
 
     except Exception ,e:
-        print("Serial communication error: "+ str(e)+"  --> TramControl")
+        print("Serial communication error: "+ str(e))
         return False
 
 
