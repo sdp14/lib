@@ -83,10 +83,10 @@ class TramConnect():
             #data_to_send = raw_input("Enter command to send to server:   ")
             try: # E Necessary for if something goes wrong 
                 data = sock.recv(1024) # E I have connection and I want you wait for some data. Something will be told over the connection 1024 is the maximum size willing to receive in bytes 
-                if not data: # E makes sure data is given and it is not empty 
+                if not data: # E makes sure data is given and it is not empty
                     break # E If none, the loop will be broken. When messages stop being recieved, end this function 
                 print data # E Print data to screen 
-             #   print "break" 
+             #   print "break"
                 TramAction.response = data # E setting a variable 
                 if(data.isdigit()): # E Checks to see if is number (True) if not then (False)
                     emergency = 0 
@@ -101,11 +101,10 @@ class TramConnect():
                         if(j==3 or j==8):
                             TramAction.temperature = j
                         if(j==2): # E or j==7 or j==8:  Will cause an emergency state 
-                            emergency = 1 
+                            emergency = 1
                         # E To implment more checks if(j==2 or j==7 or j==8):  
                         # 2 related to accelerometer, 7 to low battery, 8 to high temp in tram 
                         TramAction.emergency = emergency
-
             except Exception ,e: # E if something goes wrong on connect it will exit the function. 
                 print("Serial communication error: "+ str(e))
                 break
