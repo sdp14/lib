@@ -63,7 +63,7 @@ class StateMachine(): # E
         interrupt=0
 
 
-        for i in inputs: # E go 1 by 1 through inputs 
+        for i in inputs: # E go one-by-one through inputs 
             server_command=get_server_command(self) # E ask website for new command 
 
             if(TramAction.emergency==1 or not TramAction.run): # E emergency situation has occured, stop moving

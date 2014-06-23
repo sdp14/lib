@@ -78,23 +78,24 @@ class TramConnect():
 
         #Infinite loop to keep client running.
 
-        while 1: # E infinitely looping, try catch, because we are doing something over the network which can fail.
-
+        while True: # E infinitely looping, try catch, because we are doing something over the network which can fail.
             #data_to_send = raw_input("Enter command to send to server:   ")
             try: # E Necessary for if something goes wrong 
                 data = sock.recv(1024) # E I have connection and I want you wait for some data. Something will be told over the connection 1024 is the maximum size willing to receive in bytes 
                 if not data: # E makes sure data is given and it is not empty
                     break # E If none, the loop will be broken. When messages stop being recieved, end this function 
-                print data # E Print data to screen 
-             #   print "break"
+                else:
+                    print("YEAH!!!! THERE IS INFO!!!!!!!!!!!!!!!")
+                print(data) # E Print data to screen
+                print(data)
                 TramAction.response = data # E setting a variable 
                 if(data.isdigit()): # E Checks to see if is number (True) if not then (False)
                     emergency = 0 
-                    nums = [int(i) for i in data] # E will go through numbers. If given ten numbers, each loop wull contain one 
+                    nums = [int(i) for i in data] # E will go through numbers. If given ten numbers, each loop will contain one 
                     for j in nums: 
                         if(j<3): # E Dirty switch statement (numbers are cryptic, less efficeint but more readable like strings)
                             TramAction.accel_result = j # E depending on what number is recieved, will do different things
-                        if(j==5 or j==6): # E Possibily forward and backward? 
+                        if(j==5 or j==6): # E Possibly forward and backward? 
                             TramAction.motor_switch = j
                         if(j==4 or j==7): # E 7 is low battery, 
                             TramAction.battery = j 
@@ -105,38 +106,49 @@ class TramConnect():
                         # E To implment more checks if(j==2 or j==7 or j==8):  
                         # 2 related to accelerometer, 7 to low battery, 8 to high temp in tram 
                         TramAction.emergency = emergency
+                else:
+                    print("EEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
             except Exception ,e: # E if something goes wrong on connect it will exit the function. 
                 print("Serial communication error: "+ str(e))
                 break
 
 
     def send(self, s, param): # E This table tells you what everything is. 
+        ## param 0 = Can equal "measure", "wait", "move", "capture"
         ## param 1 = take datalogger measurements
         ## param 2 = take ten pictures
         ## param 3 = record video
         ## param 4 = streaming vid on
         ## param 5 = streaming vid off
         ## param 6 = measurement tolerance 10
-        ## param 7 = acceleration sensitivity 180
+        ## param 7 = acceleration sensitivity 500
         ## param 8 = acceleration tolerance 20
+
+        print("BEGIN SEND METHOD~~~~~~~")
 
         self.s = s # E Socket? number 2? To somewhere else. 
         self.param = param # E an array of integers 
         try: # E same a usual 
             print 'Sending to tram: ' + str(param[0])+" "+str(param[1])+" "+str(param[2])+" "+str(param[3])+" "+str(param[4])+" "+str(param[5])+" "+str(param[6])+" "+str(param[7])+" "+str(param[8]) # E prints out all the things to the screen 
             s.send(str(param[0])+" "+str(param[1])+" "+str(param[2])+" "+str(param[3])+" "+str(param[4])+" "+str(param[5])+" "+str(param[6])+" "+str(param[7])+" "+str(param[8])) # E sending message to socket
-            data = ''
-            mytimeout(0) # E sets clock to time zero 
+            info = 'fj'
+            print(info)
+            mytimeout(0) # E sets clock to time zero
+            print (param[0]+" PARAM[0]@@@@@@@@@@@@@@")
+            print(TramAction.response+"     TramAction.response============")
             while ('done' not in TramAction.response and param[0]!='wait'): # E in make_thread ln 90, waiting for other func to recieve a response that is done. Tram saying it is done
-                if(data != TramAction.response): # E if something has come in, will show what is recieved prints what is being told 
+                print("INSIDE WHILE LOOP ++++++++++++")
+                print(info+"   INFO ***********")
+                print(param[0])
+                if(info != TramAction.response): # E if something has come in, will show what is recieved prints what is being told 
                     print 'Received: ', TramAction.response
-                    data = TramAction.response
-                if(mytimeout(300)): # E if time out 300 (will wait 300 sec?) If it waits and it hasn't gotten back, you leave the function 
+                    info = TramAction.response
+                if(mytimeout(120)): # E if time out 300 (will wait 300 sec?) If it waits and it hasn't gotten back, you leave the function 
                     print 'Timing out connection'
                     break
 
-        except Exception, e: # E if something weird happens prints an exception 
-            print("Something's wrong with server. Exception type is %s" % (e))
+        except Exception, e: # E if something weird happens, print an exception 
+            print("Something is wrong with tram server. Exception type is %s" % (e))
             return False
 
 
@@ -217,5 +229,3 @@ class TramConnect():
 
         if(arg!=0):
             return (abs(time.clock()-TramConnect.time) >= arg)
-
-

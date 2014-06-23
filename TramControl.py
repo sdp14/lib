@@ -513,8 +513,8 @@ if __name__ == '__main__': # E main function, run your code. sets up states
 
             command = []
             params = []
-            print "Current hour: " + str(datetime.now().time().hour) # E print out hours 
-            for lines in open(r'.\control.txt').readlines(): # E open contorl. txt which is a list of commands you want it to run, for every command you will add to command array and paramenters 
+            print "Current time: " + str(datetime.now().time()) # E print out hours 
+            for lines in open(r'.\control.txt').readlines(): # E open control.txt which is a list of commands you want it to run, for every command you will add to command array and paramenters 
                 command.append(lines.replace("\n", "").split(" ")[0])
                 params.append(lines.replace("\n", "").split(" "))
             command = map(string.strip, command) # E turn name inside into a func (what python recognizes)
@@ -523,6 +523,4 @@ if __name__ == '__main__': # E main function, run your code. sets up states
             TramControl().runAll(command, params) # E Call run all, which loops through statemachine 
 
             if(TramAction.emergency!=0): # E if your emergency is not equal to zero, youre entering the emergency state 
-                print "Entering emergency state" 
-
-
+                print "Entering emergency state"
