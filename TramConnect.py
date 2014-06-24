@@ -85,9 +85,7 @@ class TramConnect():
                 if not data: # E makes sure data is given and it is not empty
                     break # E If none, the loop will be broken. When messages stop being recieved, end this function 
                 else:
-                    print("YEAH!!!! THERE IS INFO!!!!!!!!!!!!!!!")
-                print(data) # E Print data to screen
-                print(data)
+                    print(data) # E Print data to screen
                 TramAction.response = data # E setting a variable 
                 if(data.isdigit()): # E Checks to see if is number (True) if not then (False)
                     emergency = 0 
@@ -106,8 +104,6 @@ class TramConnect():
                         # E To implment more checks if(j==2 or j==7 or j==8):  
                         # 2 related to accelerometer, 7 to low battery, 8 to high temp in tram 
                         TramAction.emergency = emergency
-                else:
-                    print("EEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
             except Exception ,e: # E if something goes wrong on connect it will exit the function. 
                 print("Serial communication error: "+ str(e))
                 break
@@ -124,28 +120,26 @@ class TramConnect():
         ## param 7 = acceleration sensitivity 500
         ## param 8 = acceleration tolerance 20
 
-        print("BEGIN SEND METHOD~~~~~~~")
 
         self.s = s # E Socket? number 2? To somewhere else. 
         self.param = param # E an array of integers 
         try: # E same a usual 
             print 'Sending to tram: ' + str(param[0])+" "+str(param[1])+" "+str(param[2])+" "+str(param[3])+" "+str(param[4])+" "+str(param[5])+" "+str(param[6])+" "+str(param[7])+" "+str(param[8]) # E prints out all the things to the screen 
             s.send(str(param[0])+" "+str(param[1])+" "+str(param[2])+" "+str(param[3])+" "+str(param[4])+" "+str(param[5])+" "+str(param[6])+" "+str(param[7])+" "+str(param[8])) # E sending message to socket
-            info = 'fj'
-            print(info)
+            info = ''
             mytimeout(0) # E sets clock to time zero
-            print (param[0]+" PARAM[0]@@@@@@@@@@@@@@")
-            print(TramAction.response+"     TramAction.response============")
             while ('done' not in TramAction.response and param[0]!='wait'): # E in make_thread ln 90, waiting for other func to recieve a response that is done. Tram saying it is done
-                print("INSIDE WHILE LOOP ++++++++++++")
-                print(info+"   INFO ***********")
-                print(param[0])
+                print("INSIDE WHILE LOOP")
+                print(param[0]+"   PARAM 0")
                 if(info != TramAction.response): # E if something has come in, will show what is recieved prints what is being told 
                     print 'Received: ', TramAction.response
                     info = TramAction.response
-                if(mytimeout(120)): # E if time out 300 (will wait 300 sec?) If it waits and it hasn't gotten back, you leave the function 
+                if(mytimeout(1)): # E if time out 300 (will wait 300 sec?) If it waits and it hasn't gotten back, you leave the function 
                     print 'Timing out connection'
                     break
+                else:
+                    print(TramAction.response+"  TRAMACTION.RESPONSE")
+                    print(info+"   INFO")
 
         except Exception, e: # E if something weird happens, print an exception 
             print("Something is wrong with tram server. Exception type is %s" % (e))
@@ -169,7 +163,7 @@ class TramConnect():
         print param[1], param[2], param[3] # EB param[1]=1 transfers data, param[2]=1 transfers photos, param[3]=1 transfers video
         try: # E over network so something could go wrong 
             ftp=FTP(host, timeout=2) # E create a connection, specialized to move files back and forth 
-            ftp.login('logger','zz58j8bnQcFPSawhnN8YGtFT') #B Logger account and password
+            ftp.login('logger','Snickers2014') #B Logger account and password
             ftp.cwd('/upload/')  # E current working directory, for the FTP any file given will be in there. 
             if(int(param[1])==1): # E if param 1 is set to 1, data download 
                 print 'download data' 
