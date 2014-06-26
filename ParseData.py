@@ -21,7 +21,7 @@ from WebSite import WebSite
 def number_of_data(): # E returns of data recordings = overall function 
     f = open(".\dat_file\MDR.dat", "r") # E opens file 
 
-    cur_line = 0 # E current lime
+    cur_line = 0 # E current line
     data = 0 # E number of diffrent data recoring 
 
     #Tile of the data at a certain column is at cur_line == 1
