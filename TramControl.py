@@ -12,6 +12,7 @@
 # Autonomous and directed control of tram operation
 import string, sys, time, serial
 import minimalmodbus
+import pdb
 sys.path += [r'.\lib']
 from ctypes import *
 from thread import *
@@ -260,9 +261,6 @@ class Upload(StateT): # E If param one, call this upload function etc...
 
             print("Base status: Uploading Excel...")
             ParseData().make_excel_file()
-
-            print("Base: Uploading Excel.")
-            ParseData().changeext()
 
             WebSite().upload_website('Excel', '/articles/file_upload/', 2)
 
@@ -513,7 +511,7 @@ if __name__ == '__main__': # E main function, run your code. sets up states
 
             command = []
             params = []
-            print "Current time: " + str(datetime.now().time()) # E print out hours 
+            print "Current time: " + str(datetime.now().time()) # E print out time 
             for lines in open(r'.\control.txt').readlines(): # E open control.txt which is a list of commands you want it to run, for every command you will add to command array and paramenters 
                 command.append(lines.replace("\n", "").split(" ")[0])
                 params.append(lines.replace("\n", "").split(" "))
