@@ -123,7 +123,7 @@ def form_JSON(cur_data_set): # E JSON is a universal formatting. A way to format
 
     f.close() # E close file 
     json_data['data'] = data # E put data in the json data structure 
-    print(json_data+"  JSON DATA++++++++++++++++++++++")
+    print(json_data+")
     return json_data 
 
 
@@ -138,7 +138,7 @@ class ParseData(): # E
         	append_text = line
 
         myfile = open(".\dat_file\MDR.dat", "a") # E writes the last line to the end of that file, "a" means append 
-        print(append_text + "\n" +"APPEND------------------")
+        print(append_text + "\n")
         myfile.write(append_text + "\n")
 
 
@@ -157,7 +157,7 @@ class ParseData(): # E
 ##        json.dump(json_data, open('data.json', 'w'))
 
 #        print"done"
-        print(json_data+"  JSON DATA====================")
+        print(json_data)
         return json_data # E return the data point 
 
 

@@ -29,5 +29,3 @@ TramAction.battery = 0
 TramAction.temperature = 0
 TramAction.emergency = 0
 TramAction.run = True
-
-
