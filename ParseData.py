@@ -123,7 +123,7 @@ def form_JSON(cur_data_set): # E JSON is a universal formatting. A way to format
 
     f.close() # E close file 
     json_data['data'] = data # E put data in the json data structure 
-    print(json_data+")
+    print(json_data)
     return json_data 
 
 

@@ -52,7 +52,7 @@ class TramConnect():
         global host # E makes variables, calls and prints ln. 56, 57 
         global port
         host = '192.168.2.1' # B The static IP address of the control computer's wlan interface
-        port = 49179
+        port = 52007
         get_address()
         print "host = "+repr(host)
         print "port = "+repr(port)
@@ -60,7 +60,7 @@ class TramConnect():
         try:
             sock = socket() # E Make a socket (allows to talk to BB)
         #Disable this to make it work with the tram server
-            sock.settimeout(1) # E comment this out to work w/o BB, eliminates timeouts # E Try to connect for 1 second and if not possible let me know something went wrong 
+            sock.settimeout(10) # E comment this out to work w/o BB, eliminates timeouts # E Try to connect for 1 second and if not possible let me know something went wrong 
             sock.connect((host, port)) #Connect takes tuple of host and port # E connects socket to host/port
             return sock # E once previous line successfully allows use of this connection later on 
 
@@ -113,7 +113,7 @@ class TramConnect():
 
     def send(self, s, param): # E This table tells you what everything is. 
         ## param 0 = Can equal "measure", "wait", "move", "capture"
-        ## param 1 = take datalogger measurements
+        ## param 1 = take datalogger measurementsF
         ## param 2 = take ten pictures
         ## param 3 = record video
         ## param 4 = streaming vid on
@@ -138,9 +138,10 @@ class TramConnect():
                 if(info != TramAction.response): # E if something has come in, will show what is recieved prints what is being told 
                     print("Received: ", TramAction.response)
                     info = TramAction.response
-                if(mytimeout(60)): # E if time out 300 (will wait 300 sec?) If it waits and it hasn't gotten back, you leave the function 
+                if(mytimeout(120)): # E if time out 300 (will wait 300 sec?) If it waits and it hasn't gotten back, you leave the function 
                     print 'Timing out connection'
                     break
+                TramAction.response=s.recv(1024)
 
         except Exception, e: # E if something weird happens, print an exception 
             print("Something is wrong with tram server. Exception type is %s" % (e))
