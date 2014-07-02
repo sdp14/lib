@@ -51,8 +51,8 @@ class TramConnect():
 
         global host # E makes variables, calls and prints ln. 56, 57 
         global port
-        ##host = '10.100.4.76' # '127.0.0.1' can also be used
-        ##port = 52000
+        host = '192.168.2.1' # B The static IP address of the control computer's wlan interface
+        port = 49179
         get_address()
         print "host = "+repr(host)
         print "port = "+repr(port)
