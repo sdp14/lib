@@ -131,10 +131,10 @@ class TramConnect():
             info = ''
             mytimeout(0) # E sets clock to time zero
             while ('done' not in TramAction.response and param[0]!='wait'): # E in make_thread ln 90, waiting for other func to recieve a response that is done. Tram saying it is done
-                # print("INSIDE WHILE LOOP")
-                # print(param[0]+"   PARAM 0")
-                # print(TramAction.response+"  TRAMACTION.RESPONSE")
-                # print(info+"   INFO")
+                print("INSIDE WHILE LOOP")
+                print(param[0]+"   PARAM 0")
+                print(TramAction.response+"  TRAMACTION.RESPONSE")
+                print(info+"   INFO")
                 if(info != TramAction.response): # E if something has come in, will show what is recieved prints what is being told 
                     print("Received: ", TramAction.response)
                     info = TramAction.response
