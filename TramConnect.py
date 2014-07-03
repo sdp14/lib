@@ -107,7 +107,7 @@ class TramConnect():
                         # 2 related to accelerometer, 7 to low battery, 8 to high temp in tram 
                         TramAction.emergency = emergency
             except Exception ,e: # E if something goes wrong on connect it will exit the function. 
-                print("Serial communication error: "+ str(e))
+                print("Socket communication error: "+ str(e))
                 break
 
 
