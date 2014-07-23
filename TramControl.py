@@ -29,6 +29,7 @@ from WebSite import WebSite
 from ParseData import ParseData
 from Tracking import Tracking
 
+response = ''
 
 class StateT(State): # E Takes info from TramAction.py. If the input is self.transitions report results 
 # E Prints accel and if it is an emergency or not. 

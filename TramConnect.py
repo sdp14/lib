@@ -10,6 +10,7 @@
 #-------------------------------------------------------------------------------
 
 import time
+import socket
 from socket import *
 from ftplib import FTP
 import pdb
@@ -19,6 +20,8 @@ from TramAction import TramAction
 
 global host
 global port
+
+timeout_sec=960
 
 
 def mytimeout(arg): # E If you want to see if 20 seconds has gone by, call mytimeout(0) then call mytimeout 30 it will return True if it has been more than 30 seconds. Less will return false 
@@ -47,12 +50,14 @@ def get_address(): # E Sets port and host from config file. Will set it for you.
 
 class TramConnect():
 
+
     def connect(self): # E ln 51-57 reads config file and sets variable. once done this is goes in a try: block which attempts to start connection
 
         global host # E makes variables, calls and prints ln. 56, 57 
         global port
-        host = '192.168.2.1' # B The static IP address of the control computer's wlan interface
-        port = 52007
+        global timeout_sec
+        #host = '192.168.2.1' # B The static IP address of the control computer's wlan interface
+        #port = 52007
         get_address()
         print "host = "+repr(host)
         print "port = "+repr(port)
@@ -60,7 +65,10 @@ class TramConnect():
         try:
             sock = socket() # E Make a socket (allows to talk to BB)
         #Disable this to make it work with the tram server
-            sock.settimeout(10) # E comment this out to work w/o BB, eliminates timeouts # E Try to connect for 1 second and if not possible let me know something went wrong 
+            sock.settimeout(timeout_sec) # C This should be longger than 45 secends which is the time taking measurement.E comment this out to work w/o BB, eliminates timeouts # E Try to connect for 1 second and if not possible let me know something went wrong 
+            a=sock.gettimeout()
+            #b=getdefaulttimeout()
+            print 'TIMEOUT IS',a
             sock.connect((host, port)) #Connect takes tuple of host and port # E connects socket to host/port
             return sock # E once previous line successfully allows use of this connection later on 
 
@@ -84,6 +92,7 @@ class TramConnect():
             try: # E Necessary for if something goes wrong 
                 data = sock.recv(1024) # E I have connection and I want you wait for some data. Something will be told over the connection 1024 is the maximum size willing to receive in bytes 
                 if not data: # E makes sure data is given and it is not empty
+                    print("not data")
                     break # E If none, the loop will be broken. When messages stop being recieved, end this function 
                 else:
                     print(data) # E Print data to screen
@@ -103,11 +112,13 @@ class TramConnect():
                             TramAction.temperature = j
                         if(j==2): # E or j==7 or j==8:  Will cause an emergency state 
                             emergency = 1
+                            TramAction.emergency = emergency
+                            break
                         # E To implment more checks if(j==2 or j==7 or j==8):  
                         # 2 related to accelerometer, 7 to low battery, 8 to high temp in tram 
                         TramAction.emergency = emergency
             except Exception ,e: # E if something goes wrong on connect it will exit the function. 
-                print("Serial communication error: "+ str(e))
+                print("Socket communication error: "+ str(e))
                 break
 
 
@@ -127,6 +138,7 @@ class TramConnect():
         self.param = param # E an array of integers 
         try: # E same a usual
             print 'Sending to tram: ' + str(param[0])+" "+str(param[1])+" "+str(param[2])+" "+str(param[3])+" "+str(param[4])+" "+str(param[5])+" "+str(param[6])+" "+str(param[7])+" "+str(param[8]) # E prints out all the things to the screen 
+            TramAction.response=''#C to clear response before sending command
             s.send(str(param[0])+" "+str(param[1])+" "+str(param[2])+" "+str(param[3])+" "+str(param[4])+" "+str(param[5])+" "+str(param[6])+" "+str(param[7])+" "+str(param[8])) # E sending message to socket
             info = ''
             mytimeout(0) # E sets clock to time zero
@@ -142,7 +154,22 @@ class TramConnect():
                     print 'Timing out connection'
                     break
                 TramAction.response=s.recv(1024)
-
+                nums = [i for i in TramAction.response] # E will go through numbers. If given ten numbers, each loop will contain one 
+                for j in nums: 
+                    if(j<'3'): # E Dirty switch statement (numbers are cryptic, less efficeint but more readable like strings)
+                        TramAction.accel_result = j # E depending on what number is recieved, will do different things
+                    if(j=='5' or j=='6'): # E Possibly forward and backward? 
+                        TramAction.motor_switch = j
+                    if(j=='4' or j=='7'): # E 7 is low battery, 
+                        TramAction.battery = j 
+                    if(j=='3' or j=='8'):
+                        TramAction.temperature = j
+                    if(j=='2'): # E or j==7 or j==8:  Will cause an emergency state 
+                        emergency = 1
+                        TramAction.emergency = emergency
+                        break
+                if (j=='2'or j=='0'):
+                    break
         except Exception, e: # E if something weird happens, print an exception 
             print("Something is wrong with tram server. Exception type is %s" % (e))
             return False
