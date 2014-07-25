@@ -1,7 +1,12 @@
 # Author: Bruce McAlister
 # July 25, 2014
 # This program returns the tram to its dock when it is run. It is called by the TramControl.py to return
-# the tram to its dock either when it has finished its run or the bbxm sends an 
+# the tram either when it has finished a run or the bbxm sends an emergency code to the
+# control computer that requires the tram to be re-docked. This class opens a modbus connection to the
+# motor controller and writes a move signal to the IN register. The program then reads the OUT registers
+# of the controller waiting (in a while loop) for the stop switch to send a high signal. When the high
+# signal is recieved the computer writes zeros to all IN registers and the program returns True, thereby 
+# signalling TramControl.py that the tram is now at position zero.
 
 import minimalmodbus
 import serial
