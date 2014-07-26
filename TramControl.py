@@ -27,7 +27,7 @@ from TramAction import TramAction
 from TramConnect import TramConnect
 from WebSite import WebSite
 from ParseData import ParseData
-from Tracking import Tracking
+#from Tracking import Tracking
 
 
 
@@ -473,15 +473,15 @@ def connect(): # E Call all connect functions
         return False
 
 
-def tracking(): # E Does camera, runs the tracking function 
-    print("Base Station: Starting tracking")
-    try:
-        t=Tracking()
-        if(t):
-            start_new_thread(t.tracking,())
-    except Exception ,e:
-        print("Thread error: "+ str(e))
-        return False
+# def tracking(): # E Does camera, runs the tracking function 
+#     print("Base Station: Starting tracking")
+#     try:
+#         t=Tracking()
+#         if(t):
+#             start_new_thread(t.tracking,())
+#     except Exception ,e:
+#         print("Thread error: "+ str(e))
+#         return False
 
 
 
@@ -512,7 +512,7 @@ if __name__ == '__main__': # E main function, run your code. sets up states
 #    ParseData().append_data()
 #    sys.exit(0)
 
-    tracking() # E Calls all the tracking, sets up camera 
+    # tracking() # E Calls all the tracking, sets up camera 
     connect() # E Calsl connect, thing runnign in background to recieve data, runs connection test 
 
 
