@@ -69,9 +69,9 @@ class Wait(StateT): # E takes in a number of seconds wait
     def run(self, param):
         if(param[0]!='wait' or len(param)<2):
             return
-        dur = int(param[1])
-        print("Tram: Waiting %i Second(s)" % dur) # E prints number of seconds waiting 
-        time.sleep(dur) # E Waits 
+        duration = int(param[1])
+        print("Tram: Waiting %i Second(s)" % duration) # E prints number of seconds waiting 
+        time.sleep(duration) # B time.sleep(duration) suspends the program (on only the control computer) for the length 'duration' in seconds
         WebSite().tram_info(int(TramControl.position/100), param[0], 'success', int(TramControl.position/50), TramAction.accel_result) # Updates website 
 
     def next(self, input):

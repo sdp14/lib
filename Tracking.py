@@ -57,7 +57,7 @@ def start_video(mode):
 
 
     if(mode == 1):
-    	trackbar()
+        trackbar()
 
     written = True
 
@@ -71,13 +71,13 @@ def start_video(mode):
 
 
 
-	if(mode == 1):
-        	H_MIN = cv2.getTrackbarPos('H_MIN', 'TrackBarWindow')
-        	H_MAX = cv2.getTrackbarPos('H_MAX', 'TrackBarWindow')
-        	S_MIN = cv2.getTrackbarPos('S_MIN', 'TrackBarWindow')
-        	S_MAX = cv2.getTrackbarPos('S_MAX', 'TrackBarWindow')
-        	V_MIN = cv2.getTrackbarPos('V_MIN', 'TrackBarWindow')
-        	V_MAX = cv2.getTrackbarPos('V_MAX', 'TrackBarWindow')
+    if(mode == 1):
+            H_MIN = cv2.getTrackbarPos('H_MIN', 'TrackBarWindow')
+            H_MAX = cv2.getTrackbarPos('H_MAX', 'TrackBarWindow')
+            S_MIN = cv2.getTrackbarPos('S_MIN', 'TrackBarWindow')
+            S_MAX = cv2.getTrackbarPos('S_MAX', 'TrackBarWindow')
+            V_MIN = cv2.getTrackbarPos('V_MIN', 'TrackBarWindow')
+            V_MAX = cv2.getTrackbarPos('V_MAX', 'TrackBarWindow')
 
 
 
@@ -86,11 +86,11 @@ def start_video(mode):
 
         #if in calibration mode get filter details from trackbar
         if(mode == 1):
-        	thresh = cv2.inRange(hsv,np.array((H_MIN, S_MIN, V_MIN)), np.array((H_MAX, S_MAX, V_MAX)))
+            thresh = cv2.inRange(hsv,np.array((H_MIN, S_MIN, V_MIN)), np.array((H_MAX, S_MAX, V_MAX)))
 
         #if in tracking mode then the filter details have already been set
         elif(mode == 0):
-        	thresh = cv2.inRange(hsv,np.array((0, 147, 22)), np.array((256, 256, 256)))
+            thresh = cv2.inRange(hsv,np.array((0, 147, 22)), np.array((256, 256, 256)))
         #thresh2 = thresh.copy()
         # parameters of min and max values obtained using sliders
         thresh2 = morphOps(thresh)
@@ -119,7 +119,7 @@ def start_video(mode):
                 if(not written):
                     TramAction.location = 1
                     written = True
-#		return 1
+#       return 1
 
             elif(cx >= 214 and cx <=426):
 #                print "Position 2 increased"
@@ -162,6 +162,6 @@ class Tracking():
         # E when changed to start_video(1) 
         # E calibrates the image detection system 
         # E this brings up the window containing sliders for each color detected by the webcam
-#	    return start_video(mode)
+        # return start_video(mode)
 
 
