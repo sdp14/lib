@@ -13,8 +13,10 @@ import datetime
 
 global last_command_id # E keeps track of last thing 
 global Endflag
-Endflag=0
+global TimeEmerg
 last_command_id = int(WebSite().get_html_data('/articles/last_id/'))
+Endflag=0
+TimeEmerg=0
 
 def connect():
     print("Base Station: Trying to connect to tram")
@@ -90,6 +92,7 @@ class StateMachine(): # E
         global last_command_id
         global Endflag
         global AddAday
+        global TimeEmerg
         c = 0
         jump = 0
         user_disable=0
@@ -97,8 +100,12 @@ class StateMachine(): # E
         timeflag=0
         for i in inputs: # E go one-by-one through inputs 
             server_command=get_server_command(self) # E ask website for new command 
-
             if(TramAction.emergency==1 or not TramAction.run): # E emergency situation has occured, stop moving
+                if TimeEmerg ==1:
+                    TimeEmerg=0
+                    TramAction.emergency=0
+               
+                    break
                 self.currentState = self.currentState.next(TramAction.move) # Move to home and disable (0)
                 self.currentState.run(["move",0])
                 self.sock.send('StopRpt')
@@ -161,8 +168,6 @@ class StateMachine(): # E
                     t=datetime.datetime.now()
                     timeinfo1=t.strftime('%d %b %y ')+params[c][1]
                     timeinfo2=t.strftime('%d %b %y %H:%M:%S')
-                    print timeinfo1
-                    print timeinfo2 #C timeinfo is str        
                     t1=datetime.datetime.strptime(timeinfo1, "%d %b %y %H:%M:%S") # Time set in control.txt  
                     t2=datetime.datetime.strptime(timeinfo2, "%d %b %y %H:%M:%S") #  Present time  
                     print t1
@@ -191,14 +196,14 @@ class StateMachine(): # E
                         #a=asfd.is_alive()
                         print 'wait',Tremain, 'seconds'
                         while Tremain > 0:
-                            Tremain=Tremain-1
+                            Tremain=Tremain-10
                             print Tremain
-                            time.sleep(1)
+                            time.sleep(10)
                         timeflag=1
-                        connect()
-                        #a=asdf.is_alive()
-                        #print a
-
+                        connect() #C Socket timed out, need to set new connection with thread
+                        self.sock.send('StopRpt')
+                        print('sending StopRpt')
+                        TimeEmerg=1
                     if (t1<t2 and timeflag==0): #C When measurement meets time stamp, 'c' and 'i' need to be same command
                         c+=1
                         print 'Catching up command in "i"'

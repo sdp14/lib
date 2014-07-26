@@ -21,7 +21,7 @@ from TramAction import TramAction
 global host
 global port
 
-timeout_sec=960
+timeout_sec=120
 
 
 def mytimeout(arg): # E If you want to see if 20 seconds has gone by, call mytimeout(0) then call mytimeout 30 it will return True if it has been more than 30 seconds. Less will return false 
@@ -114,9 +114,13 @@ class TramConnect():
                             emergency = 1
                             TramAction.emergency = emergency
                             break
+                        if(j==0):
+                            break
                         # E To implment more checks if(j==2 or j==7 or j==8):  
                         # 2 related to accelerometer, 7 to low battery, 8 to high temp in tram 
                         TramAction.emergency = emergency
+                if(j==0):
+                    break
             except Exception ,e: # E if something goes wrong on connect it will exit the function. 
                 print("Socket communication error: "+ str(e))
                 break
@@ -132,7 +136,6 @@ class TramConnect():
         ## param 6 = measurement tolerance 10
         ## param 7 = acceleration sensitivity 500
         ## param 8 = acceleration tolerance 20
-
 
         self.s = s # E Socket? number 2? To somewhere else. 
         self.param = param # E an array of integers 
@@ -154,22 +157,22 @@ class TramConnect():
                     print 'Timing out connection'
                     break
                 TramAction.response=s.recv(1024)
-                nums = [i for i in TramAction.response] # E will go through numbers. If given ten numbers, each loop will contain one 
-                for j in nums: 
-                    if(j<'3'): # E Dirty switch statement (numbers are cryptic, less efficeint but more readable like strings)
-                        TramAction.accel_result = j # E depending on what number is recieved, will do different things
-                    if(j=='5' or j=='6'): # E Possibly forward and backward? 
-                        TramAction.motor_switch = j
-                    if(j=='4' or j=='7'): # E 7 is low battery, 
-                        TramAction.battery = j 
-                    if(j=='3' or j=='8'):
-                        TramAction.temperature = j
-                    if(j=='2'): # E or j==7 or j==8:  Will cause an emergency state 
-                        emergency = 1
-                        TramAction.emergency = emergency
-                        break
-                if (j=='2'or j=='0'):
-                    break
+  #              nums = [i for i in TramAction.response] # E will go through numbers. If given ten numbers, each loop will contain one 
+  #              for j in nums: 
+  #                  if(j<'3'): # E Dirty switch statement (numbers are cryptic, less efficeint but more readable like strings)
+  #                      TramAction.accel_result = j # E depending on what number is recieved, will do different things
+  #                  if(j=='5' or j=='6'): # E Possibly forward and backward? 
+  #                      TramAction.motor_switch = j
+  #                  if(j=='4' or j=='7'): # E 7 is low battery, 
+  #                      TramAction.battery = j 
+  #                  if(j=='3' or j=='8'):
+  #                      TramAction.temperature = j
+  #                  if(j=='2'): # E or j==7 or j==8:  Will cause an emergency state 
+  #                      emergency = 1
+  #                      TramAction.emergency = emergency
+  #                      break
+  #              if (j=='2'or j=='0'):
+  #                  break
         except Exception, e: # E if something weird happens, print an exception 
             print("Something is wrong with tram server. Exception type is %s" % (e))
             return False

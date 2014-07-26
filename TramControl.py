@@ -29,7 +29,7 @@ from WebSite import WebSite
 from ParseData import ParseData
 from Tracking import Tracking
 
-response = ''
+
 
 class StateT(State): # E Takes info from TramAction.py. If the input is self.transitions report results 
 # E Prints accel and if it is an emergency or not. 
@@ -46,6 +46,23 @@ class StateT(State): # E Takes info from TramAction.py. If the input is self.tra
             return self
 ##            raise RuntimeError("Input %s not supported for current state" % input)
 
+class Command(StateT)
+    def run(self, param):
+        if(param[0]!='move'):
+            return
+        if(param[0]=='returnhome'):
+            
+    def next(self, input):
+        # Supported transition initialization:
+        if not self.transitions:
+            self.transitions = {
+                TramAction.wait : TramControl.wait,
+                TramAction.move : TramControl.move,
+                TramAction.measure : TramControl.measure,
+                TramAction.upload : TramControl.upload,
+                TramAction.picture : TramControl.picture
+            }
+        return StateT.next(self, input)
 
 class Wait(StateT): # E takes in a number of seconds wait 
 
